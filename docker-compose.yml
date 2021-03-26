@@ -1,0 +1,88 @@
+version: '3.9'
+services:
+  
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+    - "2181:2181"
+    restart: always
+  
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+    - "9092:9092"
+    links:
+    - zookeeper
+    depends_on:
+    - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "test_sap_adapter:1:compact,test_inspect_order:1:compact,test_test_station:1:compact"
+    restart: always
+  
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+    - "27017:27017"
+  
+  sap-adapter:
+    image: ajaypremarajan/sap-adapter:firsttag
+    container_name: sap-adapter
+    links:
+    - kafka
+    ports:
+    - "1234:1234"
+    depends_on:
+    - kafka
+    
+  inspect-order:
+    image: ajaypremarajan/inspect-order:firsttag
+    container_name: inspect-order
+    links:
+    - kafka
+    - mongo
+    - test-station
+    ports:
+    - "1235:1235"
+    depends_on:
+    - kafka
+    - mongo
+      
+  test-station:
+    image: ajaypremarajan/test-station:firsttag
+    container_name: test-station
+    links:
+    - kafka
+    ports:
+    - "1236:1236" 
+    depends_on:
+    - kafka
+    
+  inspect-result:
+    image: ajaypremarajan/inspect-result:firsttag
+    container_name: inspect-result
+    links:
+    - kafka
+    - mongo
+    ports:
+    - "1237:1237" 
+    depends_on:
+    - kafka
+    - mongo
+          
+  send-email:
+    image: ajaypremarajan/send-email:firsttag
+    container_name: send-email
+    links:
+    - kafka
+    - mongo
+    ports:
+    - "1238:1238"
+    depends_on:
+    - kafka
+  
+ 
