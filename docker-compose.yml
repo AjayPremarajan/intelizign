@@ -30,7 +30,7 @@ services:
     - "27017:27017"
   
   sap-adapter:
-    image: ajaypremarajan/sap-adapter:firsttag
+    image: ajaypremarajan/sap-adapter:latest
     container_name: sap-adapter
     links:
     - kafka
@@ -40,7 +40,7 @@ services:
     - kafka
     
   inspect-order:
-    image: ajaypremarajan/inspect-order:firsttag
+    image: ajaypremarajan/inspect-order:latest
     container_name: inspect-order
     links:
     - kafka
@@ -53,7 +53,7 @@ services:
     - mongo
       
   test-station:
-    image: ajaypremarajan/test-station:firsttag
+    image: ajaypremarajan/test-station:latest
     container_name: test-station
     links:
     - kafka
@@ -63,7 +63,7 @@ services:
     - kafka
     
   inspect-result:
-    image: ajaypremarajan/inspect-result:firsttag
+    image: ajaypremarajan/inspect-result:latest
     container_name: inspect-result
     links:
     - kafka
@@ -75,7 +75,7 @@ services:
     - mongo
           
   send-email:
-    image: ajaypremarajan/send-email:firsttag
+    image: ajaypremarajan/send-email:latest
     container_name: send-email
     links:
     - kafka
