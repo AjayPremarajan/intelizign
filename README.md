@@ -23,3 +23,12 @@ Sample output:
   "responesMessage": "Sucessfully message processed and event created",
   "eventId": "52e77918-9fff-4785-9006-6844eec32631"
 }
+
+
+logs:
+
+ELK stack is running in the docker collecting logs from microservices
+
+Kibana can be accessed at the below url
+
+http://localhost:5601/
