@@ -22,3 +22,4 @@ Sample data:
 }
 
 If result is sent null, then random value is assigned upon which send-email microservice call is decided
+productNumber should atleast have an alphabet in it for the application logic to work
