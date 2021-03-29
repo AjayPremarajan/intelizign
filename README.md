@@ -1,14 +1,9 @@
 # intelizign
-Run the docker-compose file to orchestra the entire microservice
+Keep docker-compose.yml and logstash folder in a separate folder
+run docker-compose up -d
 
 Starting point of the microservice
 http://localhost:1234/swagger-ui.html#!/sap-adapter-controller/processUsingPOST
-
-
-Logging service
-http://localhost:1233/swagger-ui.html#!/logging-service-controller/getLogsUsingGET
-
-If you send "clear" string in the request of logging service the request queue is cleared from memory
 
 
 Sample data:
@@ -21,6 +16,10 @@ Sample data:
 	"result":true
 }
 
-If result is sent null, then random value is assigned upon which send-email microservice call is decided.
+Sample output:
 
-productNumber should atleast have an alphabet in it for the application logic to work
+{
+  "responseCode": "200",
+  "responesMessage": "Sucessfully message processed and event created",
+  "eventId": "52e77918-9fff-4785-9006-6844eec32631"
+}

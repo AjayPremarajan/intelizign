@@ -21,7 +21,7 @@ public class SapAdapterController {
 	
 	@PostMapping("/")
 	public Message process(@RequestBody ProductAttribute productAttribute) {
-		log.info("Received request for processing",productAttribute);
+		log.info("SAP-ADAPTER: Received request for processing ->"+productAttribute);
 		return sapAdapterService.process(productAttribute);
 	}
 }

@@ -16,15 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConsumer {
 	@Autowired
 	private InspectOrderService inspectOrderService;
+
 	@KafkaListener(topics = "test_sap_adapter", groupId = "group_id")
 	public void consumeMessage(String message) {
 		EventMember eventMember;
 		try {
 			eventMember = new ObjectMapper().readValue(message, EventMember.class);
-			System.out.println("The message received is:" + eventMember);
+			log.info("INSPECT-ORDER: Received message:"+eventMember);
 			inspectOrderService.process(eventMember);
 		} catch (JsonProcessingException e) {
-			log.error("Exception occured during receiving data from kafka", e);
+			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage());
 		}
 	}
 }

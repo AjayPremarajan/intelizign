@@ -19,13 +19,20 @@ public class TestStationService {
 	public void process(EventMember eventMember) {
 		try {
 			setRandomBoolean(eventMember);
+			eventMember.setDestination("INSPECT-RESULT");
+			eventMember.setSource("TEST-STATION");
+			log.info("TEST-STATION: Kafka message sent to INSPECT-RESULT for:" + eventMember.getEventId());
 			kafkaProducer.sendMessage(eventMember);
 		} catch (Exception e) {
-			log.error("Exception occured while processing the request", e);
+			log.error("TEST-STATION: Exception occured:" + e.getMessage());
 		}
 	}
 
 	public void setRandomBoolean(EventMember eventMember) {
-		eventMember.getProductAttribute().setResult(new Random().nextBoolean());
+		if (eventMember.getEventBody().getProductAttribute().getResult() == null)
+			eventMember.getEventBody().getProductAttribute().setResult(new Random().nextBoolean());
+		else
+			log.info("TEST-STATION: Application logic for Result field bypassed and using actual value for"
+					+ eventMember.getEventId());
 	}
 }

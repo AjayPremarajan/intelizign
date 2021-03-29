@@ -22,10 +22,10 @@ public class KafkaConsumer {
 		EventMember eventMember;
 		try {
 			eventMember = new ObjectMapper().readValue(message, EventMember.class);
-			System.out.println("The message received is:" + eventMember);
+			log.info("SEND-EMAIL: Kafka message received:" + eventMember);
 			sendEmailService.process(eventMember);
-		} catch (JsonProcessingException e) {
-			log.error("Exception occured during receiving data from kafka", e);
+		} catch (Exception e) {
+			log.error("SEND-EMAIL: Exception occurred:" + e.getMessage());
 		}
 	}
 }

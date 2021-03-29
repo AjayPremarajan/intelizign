@@ -20,13 +20,19 @@ public class InspectOrderService {
 	private EventMemberRepository eventMemberRepository;
 	@Autowired
 	private RestTemplate restTemplate;
+
 	public void process(EventMember eventMember) {
 		try {
-			eventMember.setStationType(restTemplate.getForObject("http://test-station:1236/testStation/"+eventMember.getProductAttribute().getProductNumber(),String.class));
+			String stationType = restTemplate.getForObject("http://test-station:1236/testStation/"
+					+ eventMember.getEventBody().getProductAttribute().getProductNumber(), String.class);
+			eventMember.getEventBody().setStationType(stationType);
+			eventMember.setSource("INSPECT-ORDER");
+			eventMember.setDestination("TEST-STATION");
 			eventMemberRepository.save(eventMember);
+			log.info("INSPECT-ORDER: Kafka message sent to TEST-STATION for:" + eventMember.getEventId());
 			kafkaProducer.sendMessage(eventMember);
 		} catch (Exception e) {
-			log.error("Exception occured while processing the request", e);
+			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage());
 		}
 
 	}

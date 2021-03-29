@@ -12,18 +12,10 @@ public class SendEmailService {
 
 	public void process(EventMember eventMember) {
 		try {
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("The recieved data:"+eventMember);
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			log.info("----------------------------------------------------");
-			
+			if (eventMember.getEventBody().getProductAttribute().getResult())
+				log.info("SEND-MAIL: The result value was randomly assigned TRUE:" + eventMember.getEventId());
+			else
+				log.info("SEND-MAIL: The result value was randomly assigned FALSE:" + eventMember.getEventId());
 		} catch (Exception e) {
 			log.error("Exception occured while processing the request", e);
 		}

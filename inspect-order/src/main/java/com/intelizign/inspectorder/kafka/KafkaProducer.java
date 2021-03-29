@@ -22,7 +22,7 @@ public class KafkaProducer {
 		try {
 			this.kafkaTemplate.send(TOPIC, mapper.writeValueAsString(eventMember));
 		} catch (JsonProcessingException e) {
-			log.error("Exception occured while sending message to kafka", e);
+			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage());
 		}
 	}
 }

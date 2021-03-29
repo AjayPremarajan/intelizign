@@ -1,22 +1,20 @@
 package com.intelizign.teststation.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true, includeFieldNames = true)
 public class EventMember {
-//Indicate the information about consumer of the message
-private String scope;
-//A ID generated to keep track of the request
-private String event_id;
-//Indicate the information about the producer of the message
-private String source;
-//payload
-private ProductAttribute productAttribute;
-private String stationType;
+	private String source;
+	private String destination;
+	private String eventId;
+	private EventBody eventBody;
 }

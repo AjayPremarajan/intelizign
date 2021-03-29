@@ -19,12 +19,13 @@ public class InspectResultService {
 
 	public void process(EventMember eventMember) {
 		try {
-			if (!eventMember.getProductAttribute().getResult()) {
-				kafkaProducer.sendMessage(eventMember);
-			}
+			eventMember.setDestination("SEND-MAIL");
+			eventMember.setSource("INSPECT-RESULT");
+			log.info("INSPECT-RESULT: Sending data to SEND-MAIL for:" + eventMember.getEventId());
+			kafkaProducer.sendMessage(eventMember);
 			eventMemberRepository.save(eventMember);
 		} catch (Exception e) {
-			log.error("Exception occured while processing the request", e);
+			log.error("INSPECT-RESULT: Exception occured:" + e.getMessage());
 		}
 
 	}

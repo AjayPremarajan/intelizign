@@ -1,88 +1,151 @@
 version: '3.9'
 services:
+    elasticsearch:
+        image: elasticsearch:7.7.0
+        container_name: elasticsearch
+        hostname: elasticsearch
+        environment:
+            - "discovery.type=single-node"
+        ports:
+            - 9200:9200
+            - 9300:9300
+
+    kibana:
+        image: kibana:7.7.0
+        container_name: kibana
+        hostname: kibana
+        ports:
+            - 5601:5601
+        links:
+            - elasticsearch:elasticsearch
+        depends_on:
+          - elasticsearch
+
+    logstash:
+        image: logstash:7.7.0
+        container_name: logstash
+        hostname: logstash
+        ports:
+            - 9600:9600
+            - 127.0.0.1:8089:8089
+        volumes:
+          - .\logstash:/usr/share/logstash/pipeline/
+        links:
+            - elasticsearch:elasticsearch
+        depends_on:
+          - elasticsearch
   
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
-    ports:
-    - "2181:2181"
-    restart: always
-  
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    ports:
-    - "9092:9092"
-    links:
-    - zookeeper
-    depends_on:
-    - zookeeper
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "test_sap_adapter:1:compact,test_inspect_order:1:compact,test_test_station:1:compact"
-    restart: always
-  
-  mongo:
-    image: mongo
-    container_name: mongo
-    ports:
-    - "27017:27017"
-  
-  sap-adapter:
-    image: ajaypremarajan/sap-adapter:latest
-    container_name: sap-adapter
-    links:
-    - kafka
-    ports:
-    - "1234:1234"
-    depends_on:
-    - kafka
-    
-  inspect-order:
-    image: ajaypremarajan/inspect-order:latest
-    container_name: inspect-order
-    links:
-    - kafka
-    - mongo
-    - test-station
-    ports:
-    - "1235:1235"
-    depends_on:
-    - kafka
-    - mongo
+    zookeeper:
+        image: wurstmeister/zookeeper
+        container_name: zookeeper
+        ports:
+        - "2181:2181"
+        restart: always
       
-  test-station:
-    image: ajaypremarajan/test-station:latest
-    container_name: test-station
-    links:
-    - kafka
-    ports:
-    - "1236:1236" 
-    depends_on:
-    - kafka
-    
-  inspect-result:
-    image: ajaypremarajan/inspect-result:latest
-    container_name: inspect-result
-    links:
-    - kafka
-    - mongo
-    ports:
-    - "1237:1237" 
-    depends_on:
-    - kafka
-    - mongo
+    kafka:
+        image: wurstmeister/kafka
+        container_name: kafka
+        ports:
+        - "9092:9092"
+        links:
+        - zookeeper
+        depends_on:
+        - zookeeper
+        environment:
+          KAFKA_ADVERTISED_HOST_NAME: kafka
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_CREATE_TOPICS: "test_sap_adapter:1:compact,test_inspect_order:1:compact,test_test_station:1:compact"
+        restart: always
+      
+    mongo:
+        image: mongo
+        container_name: mongo
+        ports:
+        - "27017:27017"
+      
+    sap-adapter:
+        image: ajaypremarajan/sap-adapter:latest
+        container_name: sap-adapter
+        links:
+        - kafka
+        ports:
+        - "1234:1234"
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "tcp://localhost:8089"
+        depends_on:
+        - kafka
+        - logstash
+        
+    inspect-order:
+        image: ajaypremarajan/inspect-order:latest
+        container_name: inspect-order
+        links:
+        - kafka
+        - mongo
+        - test-station
+        
+        ports:
+        - "1235:1235"
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "tcp://localhost:8089"
+        depends_on:
+        - kafka
+        - mongo
+        - logstash
           
-  send-email:
-    image: ajaypremarajan/send-email:latest
-    container_name: send-email
-    links:
-    - kafka
-    - mongo
-    ports:
-    - "1238:1238"
-    depends_on:
-    - kafka
+    test-station:
+        image: ajaypremarajan/test-station:latest
+        container_name: test-station
+        links:
+        - kafka
+        
+        ports:
+        - "1236:1236" 
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "tcp://localhost:8089"
+        depends_on:
+        - kafka
+        - logstash
+        
+    inspect-result:
+        image: ajaypremarajan/inspect-result:latest
+        container_name: inspect-result
+        links:
+        - kafka
+        - mongo
+        
+        ports:
+        - "1237:1237" 
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "tcp://localhost:8089"
+        depends_on:
+        - kafka
+        - mongo
+        - logstash
+              
+    send-email:
+        image: ajaypremarajan/send-email:latest
+        container_name: send-email
+        links:
+        - kafka
+        - mongo
+        
+        ports:
+        - "1238:1238"
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "tcp://localhost:8089"
+        depends_on:
+        - kafka
+        - logstash
   
  

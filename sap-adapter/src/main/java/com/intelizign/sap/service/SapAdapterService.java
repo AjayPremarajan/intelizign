@@ -3,12 +3,13 @@ package com.intelizign.sap.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.intelizign.sap.entity.EventBody;
 import com.intelizign.sap.entity.EventMember;
 import com.intelizign.sap.entity.Message;
 import com.intelizign.sap.entity.ProductAttribute;
 import com.intelizign.sap.kafka.KafkaProducer;
 import com.intelizign.sap.util.Constants;
-import com.intelizign.sap.util.Sha256;
+import com.intelizign.sap.util.EventIdGenerator;
 import com.intelizign.sap.util.Utilities;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +23,21 @@ public class SapAdapterService {
 	public Message process(ProductAttribute productAttribute) {
 		Message message = getFailure();
 		EventMember eventMember;
+		EventBody eventBody;
 		try {
-			if (Utilities.nullCheck(productAttribute)) {
-				eventMember = EventMember.builder().event_id(Sha256.computeGeneratedId(productAttribute))
-						.scope("inspection_order_processing").source("sap-adapter").build();
-				eventMember.setProductAttribute(productAttribute);
-				log.info("Processing data for:" + eventMember.getEvent_id());
-				log.info(eventMember.getSource() + "---->" + eventMember.getScope());
+			if (Utilities.nullCheck(productAttribute, productAttribute.getProductNumber())) {
+				eventBody = EventBody.builder().productAttribute(productAttribute).build();
+				eventMember = EventMember.builder().eventId(EventIdGenerator.generate())
+						.destination("inspection_order_processing").source("sap-adapter").eventBody(eventBody).build();
+				eventMember.setSource("SAP-ADAPTER");
+				eventMember.setDestination("INSPECT-ORDER");
+				log.info("SAP-ADAPTER: Kafka message sent to INSPECT-ORDER for eventId:" + eventMember.getEventId());
 				producer.sendMessage(eventMember);
-				log.info("Kafka Message sent successfully for:" + eventMember.getEvent_id());
 				message = getSuccess();
+				message.setEventId(eventMember.getEventId());
 			}
 		} catch (Exception e) {
-			log.error("Exception occured while sending data to kafka", e);
+			log.error("SAP-ADAPTER: Exception occured:" + e.getMessage());
 			message.setResponesMessage(e.getMessage());
 		}
 		return message;

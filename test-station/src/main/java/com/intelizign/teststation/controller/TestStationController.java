@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.intelizign.teststation.service.StationTypeService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/testStation")
+@Slf4j
 public class TestStationController {
 	@Autowired
 	private StationTypeService stationTypeService;
 
 	@GetMapping("/{id}")
 	public String getStationType(@PathVariable("id") String input) {
+		log.info("TEST-STATION: Request received for station type for:" + input);
 		return stationTypeService.getStationType(input);
 	}
 }
