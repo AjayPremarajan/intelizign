@@ -1,9 +1,9 @@
 package com.intelizign.inspectorder.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.intelizign.inspectorder.entity.EventMember;
 
-public interface EventMemberRepository extends MongoRepository<EventMember, String> {
+public interface EventMemberRepository extends JpaRepository<EventMember, String> {
 
 }

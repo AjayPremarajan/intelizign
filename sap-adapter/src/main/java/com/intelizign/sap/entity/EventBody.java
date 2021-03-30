@@ -10,9 +10,10 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString
 public class EventBody {
+	private String eventId;
 	// payload
-	private ProductAttribute productAttribute;
 	private String stationType;
+	private ProductAttribute productAttribute;
 }

@@ -1,5 +1,6 @@
 package com.intelizign.sendemail.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +12,11 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventBody {
+	private String eventId;
 	// payload
-	private ProductAttribute productAttribute;
 	private String stationType;
+	private ProductAttribute productAttribute;
 }

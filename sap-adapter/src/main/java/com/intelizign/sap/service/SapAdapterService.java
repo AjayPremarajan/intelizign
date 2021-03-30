@@ -26,15 +26,17 @@ public class SapAdapterService {
 		EventBody eventBody;
 		try {
 			if (Utilities.nullCheck(productAttribute, productAttribute.getProductNumber())) {
-				eventBody = EventBody.builder().productAttribute(productAttribute).build();
-				eventMember = EventMember.builder().eventId(EventIdGenerator.generate())
-						.destination("inspection_order_processing").source("sap-adapter").eventBody(eventBody).build();
+				String id = EventIdGenerator.generate();
+				productAttribute.setEventId(id);
+				eventBody = EventBody.builder().eventId(id).productAttribute(productAttribute).build();
+				eventMember = EventMember.builder().eventId(id).destination("inspection_order_processing")
+						.source("sap-adapter").eventBody(eventBody).build();
 				eventMember.setSource("SAP-ADAPTER");
 				eventMember.setDestination("INSPECT-ORDER");
-				log.info("SAP-ADAPTER: Kafka message sent to INSPECT-ORDER for eventId:" + eventMember.getEventId());
+				log.info("SAP-ADAPTER: Kafka message sent to INSPECT-ORDER for eventId:" + id);
 				producer.sendMessage(eventMember);
 				message = getSuccess();
-				message.setEventId(eventMember.getEventId());
+				message.setEventId(id);
 			}
 		} catch (Exception e) {
 			log.error("SAP-ADAPTER: Exception occured:" + e.getMessage());

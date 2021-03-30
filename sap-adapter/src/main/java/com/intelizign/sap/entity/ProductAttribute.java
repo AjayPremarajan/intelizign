@@ -10,8 +10,9 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString
 public class ProductAttribute {
+	private String eventId;
 	private String productNumber;
 	private String attribute;
 	private String testStation;

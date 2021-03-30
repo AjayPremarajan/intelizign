@@ -12,8 +12,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true, includeFieldNames = true)
 public class EventMember {
+	private String eventId;
 	private String source;
 	private String destination;
-	private String eventId;
 	private EventBody eventBody;
 }

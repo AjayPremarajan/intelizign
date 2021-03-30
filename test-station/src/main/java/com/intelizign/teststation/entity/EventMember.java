@@ -1,5 +1,6 @@
 package com.intelizign.teststation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +12,11 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true, includeFieldNames = true)
+@ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventMember {
+	private String eventId;
 	private String source;
 	private String destination;
-	private String eventId;
 	private EventBody eventBody;
 }
