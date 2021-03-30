@@ -2,9 +2,8 @@
 Keep docker-compose.yml and logstash folder in a separate folder
 run docker-compose up -d
 
-Starting point of the microservice
-http://localhost:1234/swagger-ui.html#!/sap-adapter-controller/processUsingPOST
-
+Starting point of the micro-service
+http://localhost:1234/swagger-ui.html
 
 Sample data:
 
@@ -13,7 +12,7 @@ Sample data:
 	"productNumber":"C123456",
 	"attribute":"1",
 	"testStation":"C",
-	"result":true
+	"result":null
 }
 
 Sample output:
@@ -24,7 +23,6 @@ Sample output:
   "eventId": "52e77918-9fff-4785-9006-6844eec32631"
 }
 
-
 logs:
 
 ELK stack is running in the docker collecting logs from microservices
@@ -32,3 +30,11 @@ ELK stack is running in the docker collecting logs from microservices
 Kibana can be accessed at the below url
 
 http://localhost:5601/
+
+
+database:
+Go to CLI of mongo db
+show dbs;
+use datbase_name
+show collection
+db.employee.find().pretty()
