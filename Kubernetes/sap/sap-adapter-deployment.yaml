@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sap-adapter
+  name: sap-adapter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sap-adapter
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sap-adapter
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_HOST
+          value: "9092"
+        - name: KAFKA_URL
+          value: kafka-service
+        - name: SAP_ADAPTER_PORT
+          value: "1234"
+        image: ajaypremarajan/sap-adapter:latest
+        imagePullPolicy: ""
+        name: sap-adapter
+        ports:
+        - containerPort: 1234
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
