@@ -13,7 +13,7 @@ spec:
   - name: "8888"
     port: 8888
     targetPort: 80
-    nodePort: 32000
+    nodePort: 33000
   selector:
     io.kompose.service: pgadmin
   type: NodePort
