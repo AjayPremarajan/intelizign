@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: inspect-order
+  name: inspect-order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: inspect-order
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: inspect-order
+    spec:
+      containers:
+      - env:
+        - name: DB_PASS
+          value: inspect_db
+        - name: DB_URL
+          value: jdbc:postgresql://postgres:5432/inspect_db
+        - name: DB_USER
+          value: inspect_db
+        - name: INSPECT_ORDER_PORT
+          value: "1235"
+        - name: KAFKA_HOST
+          value: "9092"
+        - name: KAFKA_URL
+          value: kafka-service
+        - name: TEST_STATION_PORT
+          value: "1236"
+        - name: TEST_STATION_URL
+          value: test-station
+        image: ajaypremarajan/inspect-order:latest
+        imagePullPolicy: ""
+        name: inspect-order
+        ports:
+        - containerPort: 1235
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
