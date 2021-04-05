@@ -1,6 +1,7 @@
 package com.intelizign.inspectorder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,11 +21,18 @@ public class InspectOrderService {
 	private EventMemberRepository eventMemberRepository;
 	@Autowired
 	private RestTemplate restTemplate;
+	@Value("${TEST_STATION_URL}")
+	private String testStationUrl;
+	@Value("${TEST_STATION_PORT}")
+	private String testStationPort;
 
 	public void process(EventMember eventMember) {
 		try {
-			String stationType = restTemplate.getForObject("http://test-station:1236/testStation/"
-					+ eventMember.getEventBody().getProductAttribute().getProductNumber(), String.class);
+			String stationType = restTemplate
+					.getForObject(
+							"http://" + testStationUrl + ":" + testStationPort + "/testStation/"
+									+ eventMember.getEventBody().getProductAttribute().getProductNumber(),
+							String.class);
 			eventMember.getEventBody().setStationType(stationType);
 			eventMember.setSource("INSPECT-ORDER");
 			eventMember.setDestination("TEST-STATION");

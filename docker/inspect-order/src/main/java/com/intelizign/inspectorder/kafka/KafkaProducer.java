@@ -1,5 +1,7 @@
 package com.intelizign.inspectorder.kafka;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class KafkaProducer {
 	public void sendMessage(EventMember eventMember) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			this.kafkaTemplate.send(TOPIC, mapper.writeValueAsString(eventMember));
+			this.kafkaTemplate.send(TOPIC, UUID.randomUUID().toString(), mapper.writeValueAsString(eventMember));
 		} catch (JsonProcessingException e) {
 			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage());
 		}

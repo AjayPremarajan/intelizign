@@ -1,10 +1,11 @@
 package com.intelizign.inspectresult.kafka;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intelizign.inspectresult.entity.EventMember;
 
@@ -20,7 +21,7 @@ public class KafkaProducer {
 	public void sendMessage(EventMember eventMember) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			this.kafkaTemplate.send(TOPIC, mapper.writeValueAsString(eventMember));
+			this.kafkaTemplate.send(TOPIC, UUID.randomUUID().toString(), mapper.writeValueAsString(eventMember));
 		} catch (Exception e) {
 			log.error("INSPECT-RESULT: Exception occured:"+e.getMessage());
 		}

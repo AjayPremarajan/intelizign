@@ -1,19 +1,21 @@
 
 server:
-  port: 1235
+  port: ${INSPECT_ORDER_PORT}
 spring:
   kafka:
     producer:
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: ${KAFKA_URL}:${KAFKA_HOST}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       auto-offset-reset: earliest
       group-id: group-id
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: ${KAFKA_URL}:${KAFKA_HOST}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect  datasource:    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
