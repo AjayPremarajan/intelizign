@@ -26,11 +26,11 @@ spec:
       containers:
       - env:
         - name: DB_PASS
-          value: inspect_db
+          value: postgres
         - name: DB_URL
-          value: jdbc:postgresql://postgres:5432/inspect_db
+          value: jdbc:postgresql://148.251.78.76:5432/postgres
         - name: DB_USER
-          value: inspect_db
+          value: postgres
         - name: INSPECT_RESULT_PORT
           value: "1237"
         - name: KAFKA_HOST
