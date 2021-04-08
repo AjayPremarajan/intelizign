@@ -39,7 +39,7 @@ public class SapAdapterService {
 				message.setEventId(id);
 			}
 		} catch (Exception e) {
-			log.error("SAP-ADAPTER: Exception occured:" + e.getMessage());
+			log.error("SAP-ADAPTER: Exception occured:" + e.getMessage()+ " for->"+productAttribute);
 			message.setResponesMessage(e.getMessage());
 		}
 		return message;

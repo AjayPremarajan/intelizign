@@ -17,7 +17,7 @@ public class SendEmailService {
 			else
 				log.info("SEND-MAIL: The result value was randomly assigned FALSE:" + eventMember.getEventId());
 		} catch (Exception e) {
-			log.error("Exception occured while processing the request", e);
+			log.error("Exception occured while processing the request: " + e.getMessage() + " for->" + eventMember);
 		}
 
 	}

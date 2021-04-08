@@ -24,7 +24,7 @@ public class TestStationService {
 			log.info("TEST-STATION: Kafka message sent to INSPECT-RESULT for:" + eventMember.getEventId());
 			kafkaProducer.sendMessage(eventMember);
 		} catch (Exception e) {
-			log.error("TEST-STATION: Exception occured:" + e.getMessage());
+			log.error("TEST-STATION: Exception occured:" + e.getMessage()+" for->"+eventMember);
 		}
 	}
 

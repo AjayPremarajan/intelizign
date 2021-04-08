@@ -25,7 +25,7 @@ public class InspectResultService {
 			kafkaProducer.sendMessage(eventMember);
 			eventMemberRepository.save(eventMember);
 		} catch (Exception e) {
-			log.error("INSPECT-RESULT: Exception occured:" + e.getMessage());
+			log.error("INSPECT-RESULT: Exception occured:" + e.getMessage()+" for->"+eventMember);
 		}
 
 	}

@@ -40,7 +40,7 @@ public class InspectOrderService {
 			log.info("INSPECT-ORDER: Kafka message sent to TEST-STATION for:" + eventMember.getEventId());
 			kafkaProducer.sendMessage(eventMember);
 		} catch (Exception e) {
-			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage());
+			log.error("INSPECT-ORDER: Exception occured:" + e.getMessage()+" for->"+eventMember);
 		}
 
 	}
